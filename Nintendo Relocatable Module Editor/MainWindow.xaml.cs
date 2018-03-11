@@ -6,13 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Threading;
 
 namespace Nintendo_Relocatable_Module_Editor
 {
@@ -249,20 +243,9 @@ namespace Nintendo_Relocatable_Module_Editor
             if (This_Info.Data == null)
                 This_Info.Data = File_Buffer.Skip((int)This_Info.Offset).Take((int)This_Info.Size).ToArray();
 
-            /*if (This_Info.Section_Name.Equals(".text"))
-            {
-                uint[] Data = new uint[This_Info.Data.Length / 4];
-                for (int i = 0; i < This_Info.Data.Length; i += 4)
-                {
-                    Data[i / 4] = BitConverter.ToUInt32(This_Info.Data.Skip(i).Take(4).Reverse().ToArray(), 0);
-                }
-                GekkoAssembly.DisassembleHex(Data);
-            }*/
-
             HexEditor.Stream = new MemoryStream(This_Info.Data); // "new MemoryStream(Data)" is probably a memory leak
             HexEditor.SetPosition(0, 0);
             Display_Content();
-            //HexEditor.SetPosition(This_Info.Offset, This_Info.Size);
         }
 
         private void Reload_Tree_View(Dictionary<string, List<Map_Info>> MapInfo)
@@ -419,13 +402,13 @@ namespace Nintendo_Relocatable_Module_Editor
                             {
                                 stream.Write(info.Data, 0, info.Data.Length);
                             }
-                            else if (info.Offset < File_Buffer.Length && info.Offset + info.Size < File_Buffer.Length)
+                            else
                             {
                                 if (info.Section_Name.Equals(".bss"))
                                 {
                                     stream.Write(new byte[info.Size], 0, (int)info.Size); // .bss section's space is allocated at program launch, usually to zero'ed data.
                                 }
-                                else
+                                else if(info.Offset < File_Buffer.Length && info.Offset + info.Size < File_Buffer.Length)
                                 {
                                     stream.Write(File_Buffer, (int)info.Offset, (int)info.Size);
                                 }
