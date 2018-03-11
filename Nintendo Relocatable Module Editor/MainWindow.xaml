@@ -4,9 +4,60 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Nintendo_Relocatable_Module_Editor"
+        xmlns:Hex="clr-namespace:WpfHexaEditor;assembly=WPFHexaEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Nintendo Reloctable Module Editor" Height="500" Width="800"
+        Closed="On_Closed">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="28"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" Grid.ColumnSpan="3">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Click="Open_Click"/>
+                <MenuItem Header="_Import Map File" Click="Add_Map_File_Click"/>
+                <MenuItem Header="_Dump REL Contents" Click="Dump_Click"/>
+                <MenuItem Header="_Save"/>
+                <MenuItem Header="_Save As"/>
+            </MenuItem>
+            <MenuItem Header="_Search">
+                <MenuItem Header="_Search Map String" Click="Search"/>
+            </MenuItem>
+        </Menu>
+        <TreeView
+            x:Name="RelView"
+            Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"
+            VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsVirtualizing="True">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <EventSetter Event="Selected" Handler="TreeViewSelectedItemChanged"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
+        <Border BorderBrush="{x:Null}" Grid.Column="1" Grid.Row="1">
+            <TextBlock x:Name="currentlyEditing" Grid.Column="1" Grid.Row="1" TextAlignment="Center" Text="Currently Editing: Nothing" VerticalAlignment="Center"/>
+        </Border>
+        <Hex:HexEditor x:Name="HexEditor" Grid.Column="1" Grid.Row="2" AllowAutoHightLighSelectionByte="False"/>
+        <DockPanel Grid.Column="2" Grid.Row="1" Grid.RowSpan="2">
+            <Label Content="Data Type" DockPanel.Dock="Top"/>
+            <RadioButton x:Name="u8Button" Content="Byte" IsChecked="True" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <RadioButton x:Name="u16Button" Content="Short" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <RadioButton x:Name="u32Button" Content="Int" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <RadioButton x:Name="floatButton" Content="Float" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <RadioButton x:Name="textButton" Content="Text" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <RadioButton x:Name="charSetButton" Content="Animal Crossing Character Set" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <RadioButton x:Name="charDnMSetButton" Content="Dōbutsu no Mori Character Set" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <TextBox x:Name="dataContent" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </DockPanel>
+        <Label x:Name="progressLabel" Grid.Row="3" Grid.ColumnSpan="2" Margin="5, 0, 5, 0"/>
+        <ProgressBar x:Name="progressBar" Grid.Row="3" Grid.Column="2" Width="150" Height="18"/>
     </Grid>
 </Window>
