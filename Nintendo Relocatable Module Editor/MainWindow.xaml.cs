@@ -299,6 +299,8 @@ namespace Nintendo_Relocatable_Module_Editor
                     Section_TreeViewItems.Add(Section_Item);
                 }
                 Info = MInfo.ToArray();
+
+                progressLabel.Content = "Map File Loaded";
             }
             catch (Exception e)
             {
@@ -330,11 +332,13 @@ namespace Nintendo_Relocatable_Module_Editor
                     Title = "Nintendo Reloctable Module Editor - " + Path.GetFileName(fileLocation);
                     HexEditor.Stream = new MemoryStream(File_Buffer);
                     Module = new REL(File_Buffer, fileLocation);
+
+                    progressLabel.Content = "REL Loaded";
                 }
             }
         }
 
-        private void Add_Map_File_Click(object sender, RoutedEventArgs e)
+        private async void Add_Map_File_Click(object sender, RoutedEventArgs e)
         {
             openFileDialog.Filter = "Data Map File|*.map";
             openFileDialog.DefaultExt = ".map";
@@ -345,7 +349,13 @@ namespace Nintendo_Relocatable_Module_Editor
                 if (File.Exists(mapLocation))
                 {
                     string[] Map_Lines = File.ReadAllLines(mapLocation);
-                    Dictionary<string, List<Map_Info>> Sorted_Map_Info = MapUtility.ParseMapFile(Map_Lines, File_Buffer, Module.Section_Entries, Module.Header.BSS_Section); // A0 for animal crossing
+                    Dictionary<string, List<Map_Info>> Sorted_Map_Info = null;
+
+                    await Task.Run(() =>
+                    {
+                        Sorted_Map_Info = MapUtility.ParseMapFile(Map_Lines, File_Buffer, Module.Section_Entries, Module.Header.BSS_Section);
+                    });
+
                     Reload_Tree_View(Sorted_Map_Info);
                 }
             }
