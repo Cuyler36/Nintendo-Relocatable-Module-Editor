@@ -124,6 +124,20 @@ namespace Nintendo_Relocatable_Module_Editor
                         }
                     }
                     break;
+                case "Disassembly":
+                    uint[] AssemblyData = new uint[Selected_Info.Data.Length / 4];
+                    for (int i = 0; i < Selected_Info.Data.Length; i += 4)
+                    {
+                        AssemblyData[i / 4] = BitConverter.ToUInt32(Selected_Info.Data.Skip(i).Take(4).Reverse().ToArray(), 0);
+                    }
+                    string[] Disassembly = GekkoAssembly.DisassembleHex(AssemblyData);
+
+                    foreach (string s in Disassembly)
+                    {
+                        New_Text += s + "\r\n";
+                    }
+
+                    break;
             }
 
             dataContent.Text = New_Text;
@@ -235,7 +249,7 @@ namespace Nintendo_Relocatable_Module_Editor
             if (This_Info.Data == null)
                 This_Info.Data = File_Buffer.Skip((int)This_Info.Offset).Take((int)This_Info.Size).ToArray();
 
-            if (This_Info.Section_Name.Equals(".text"))
+            /*if (This_Info.Section_Name.Equals(".text"))
             {
                 uint[] Data = new uint[This_Info.Data.Length / 4];
                 for (int i = 0; i < This_Info.Data.Length; i += 4)
@@ -243,7 +257,7 @@ namespace Nintendo_Relocatable_Module_Editor
                     Data[i / 4] = BitConverter.ToUInt32(This_Info.Data.Skip(i).Take(4).Reverse().ToArray(), 0);
                 }
                 GekkoAssembly.DisassembleHex(Data);
-            }
+            }*/
 
             HexEditor.Stream = new MemoryStream(This_Info.Data); // "new MemoryStream(Data)" is probably a memory leak
             HexEditor.SetPosition(0, 0);

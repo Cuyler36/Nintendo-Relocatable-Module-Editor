@@ -55,6 +55,7 @@
             <RadioButton x:Name="textButton" Content="Text" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
             <RadioButton x:Name="charSetButton" Content="Animal Crossing Character Set" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
             <RadioButton x:Name="charDnMSetButton" Content="Dōbutsu no Mori Character Set" Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
+            <RadioButton x:Name="disassemblyButton" Content="Disassembly"  Margin="2" DockPanel.Dock="Top" Checked="DataType_Button_Checked"/>
             <TextBox x:Name="dataContent" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True"/>
         </DockPanel>
         <Label x:Name="progressLabel" Grid.Row="3" Grid.ColumnSpan="2" Margin="5, 0, 5, 0"/>
